@@ -131,8 +131,22 @@ kubectl get secret -n monitoring prometheus-grafana -o jsonpath="{.data.admin-pa
 
 ![alt text](Images/image-11.png)
 
+# Create the Fast Api App and push the image to docker-hub.
 
+- For creating Fast-api with monitoring refer the Monitoring-app i Python-FastApi repository in my github.
 
+- Build and tag the docker with the name and version. Set the path to your docker-hub path
+```
+docker build . -t rmanimaran/fastapi-monitoring:v2
+```
+- Push the nelwy tagged image to docker-hub.
+docker push rmanimaran/fastapi-monitoring:v2
+
+- Check in docker-hub for the publicly published image.
+
+![alt text](image-2.png)
+
+- Map the image information in the deployment.yaml file.
 
 # Monitor the fast api Application
 
