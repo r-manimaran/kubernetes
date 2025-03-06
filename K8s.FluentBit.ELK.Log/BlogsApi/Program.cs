@@ -13,6 +13,8 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Exporter;
 using Serilog.Formatting.Json;
+using BlogsApi;
+using BlogsApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,13 +22,20 @@ Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
             .WriteTo.Console(new JsonFormatter())
             .WriteTo.File("log/log.txt", rollingInterval: RollingInterval.Day)
+            .WriteTo.Http("http://localhost:24224", null,
+                          textFormatter: new JsonFormatter())
+            .Enrich.WithEnvironmentName()
+            .Enrich.WithMachineName()
+            .Enrich.WithThreadId()
+            .Enrich.WithCorrelationId()
             .CreateLogger();
+            
 builder.Host.UseSerilog();
 
-Log.Logger.Information("Application is building...");
+Log.Logger.Information("Updated Application is building...");
 
 builder.Services.AddControllers();
-
+builder.Services.AddScoped<DataSeeder>();
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -116,6 +125,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-Log.Logger.Information("Application is running...");
+Log.Logger.Information("Updated Application is running...");
 
+app.ApplySeeding();
+Log.Logger.Information("Applied seeding data");
 app.Run();

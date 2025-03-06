@@ -299,3 +299,48 @@ kubectl create namespace logging
 
 
 ```
+
+# Using Docker Compose
+
+![alt text](Images/image10.png)
+
+![alt text](Images/image-11.png)
+
+![alt text](Images/image-12.png)
+
+![alt text](Images/image-13.png)
+
+In Kibana, did the below steps.
+
+- Go to the main menu (hamburger menu on the left side)
+
+- Click on "Analytics" → "Discover"
+
+ - If this is your first time:
+
+You'll need to create an index pattern
+
+    - Click "Create index pattern"
+
+    - Enter "dotnet-logs-*" as the pattern
+
+    - Click "Next step"
+
+    - Select "@timestamp" as the Time field
+
+    - Click "Create index pattern"
+
+    - Once the index pattern is created:
+
+    - Go back to "Discover"
+
+    - Select your "dotnet-logs-*" pattern from the dropdown at the top
+
+    - You should now see your logs in the main view
+
+
+![alt text](Images/image-14.png)
+
+![alt text](Images/image-15.png)
+
+![alt text](Images/image-16.png)

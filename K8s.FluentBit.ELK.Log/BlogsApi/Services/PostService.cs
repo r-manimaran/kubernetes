@@ -57,12 +57,12 @@ public class PostService : IPostService
         var post = _dbContext.Posts.FirstOrDefault(p => p.Id == id);
         if (post is null)
         {
-            _logger.LogError("Post not found");
-            throw new ApplicationException("Post not found");
+            _logger.LogError("Post with ID {PostId} not found", id);
+            throw new ApplicationException(string.Format("Post with ID {PostId} not found", id));
         }
         _dbContext.Posts.Remove(post);
         _dbContext.SaveChanges();
-        _logger.LogInformation("Post deleted");
+        _logger.LogInformation("Post with ID {PostId} deleted", id);
         return Task.CompletedTask;
     }
 
@@ -85,8 +85,8 @@ public class PostService : IPostService
                         .FirstOrDefaultAsync(p => p.Id == id);
         if (post is null)
         {
-            _logger.LogError("Post not found");
-            throw new ApplicationException("Post not found");
+           _logger.LogError("Post with ID {PostId} not found", id);
+            throw new ApplicationException(string.Format("Post with ID {PostId} not found", id));
         }
         // Map the post to PostResponse using Mapperly
         var response = _postMapper.ToPostResponse(post);
@@ -112,8 +112,9 @@ public class PostService : IPostService
         var existingPost = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Id == post.Id);
         if (existingPost is null)
         {
-            _logger.LogError("Post not found");
-            throw new ApplicationException("Post not found");
+            _logger.LogError("Post with ID {PostId} not found", post.Id);
+            string exceptionOutput = string.Format("Post with ID {PostId} not found", post.Id);
+            throw new ApplicationException(exceptionOutput);
         }
         // use Mapperly to map the post to the existing post
         _postMapper.UpdatePost(post, existingPost);

@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kubernetes", "Kubernetes", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
 		deployment.yaml = deployment.yaml
+		namespace.yaml = namespace.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DockerHub", "DockerHub", "{2ED9F27B-A9B1-4979-B968-CA0BE58EB6DF}"
@@ -16,6 +17,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DockerHub", "DockerHub", "{
 	EndProjectSection
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "helm", "helm", "{4D7A27FD-A5B2-4A52-966D-19F33D2754CC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "elasticsearch", "elasticsearch", "{4F59EC75-C579-4ACA-911C-1D5E5EC5B711}"
+	ProjectSection(SolutionItems) = preProject
+		elasticsearch-values.yaml = elasticsearch-values.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "fluent-bit", "fluent-bit", "{40691DD0-9BDA-49B4-B465-4F6183097737}"
+	ProjectSection(SolutionItems) = preProject
+		fluent-bit-values.yaml = fluent-bit-values.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "kibana", "kibana", "{E0454EBE-D4B3-42C2-AC11-D0CBF27C001E}"
+	ProjectSection(SolutionItems) = preProject
+		kibana-values.yaml = kibana-values.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +52,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4D7A27FD-A5B2-4A52-966D-19F33D2754CC} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{4F59EC75-C579-4ACA-911C-1D5E5EC5B711} = {4D7A27FD-A5B2-4A52-966D-19F33D2754CC}
+		{40691DD0-9BDA-49B4-B465-4F6183097737} = {4D7A27FD-A5B2-4A52-966D-19F33D2754CC}
+		{E0454EBE-D4B3-42C2-AC11-D0CBF27C001E} = {4D7A27FD-A5B2-4A52-966D-19F33D2754CC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {896DD07A-48C5-4631-A8E4-D84CC8CED68A}

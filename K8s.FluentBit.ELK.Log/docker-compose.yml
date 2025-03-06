@@ -4,14 +4,57 @@ services:
     container_name: BlogsApi
     build:
       context: .
-      dockerfile: BlogsApi/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "5000:8080"
       - "5001:8081"
     volumes:
       - ./logs:/app/log  # Mount a volume for log files
     logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+        driver: fluentd
+        options:
+          fluentd-address: localhost:24224
+          tag: dotnet.logs
+    depends_on:
+      - fluentbit
+    networks:
+      - logging-network
+  
+  elasticsearch:
+    image: elasticsearch:7.17.9
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=es-docker-cluster
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    networks:
+      - logging-network
+
+  kibana:
+    image: kibana:7.17.9
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    networks:
+      - logging-network
+    depends_on:
+      - elasticsearch
+
+  fluentbit:
+    image: fluent/fluent-bit:2.1.9
+    ports:
+      - "24224:24224"
+    volumes:
+      - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+    networks:
+      - logging-network
+    depends_on:
+      - elasticsearch
+
+networks:
+  logging-network:
+    driver: bridge
