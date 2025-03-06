@@ -1,0 +1,17 @@
+services:
+  blogsapi:
+    image: ${DOCKER_REGISTRY-}blogsapi
+    container_name: BlogsApi
+    build:
+      context: .
+      dockerfile: BlogsApi/Dockerfile
+    ports:
+      - "5000:8080"
+      - "5001:8081"
+    volumes:
+      - ./logs:/app/log  # Mount a volume for log files
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

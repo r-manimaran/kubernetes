@@ -1,0 +1,46 @@
+# fluent-bit-values.yaml
+config:
+  inputs: |
+    [INPUT]
+        Name              tail
+        Path              /var/log/containers/*.log
+        Parser            docker
+        Tag               kube.*
+        Refresh_Interval  5
+        Mem_Buf_Limit     5MB
+        Skip_Long_Lines   On
+
+  filters: |
+    [FILTER]
+        Name                kubernetes
+        Match               kube.*
+        Kube_URL           https://kubernetes.default.svc:443
+        Kube_CA_File       /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        Kube_Token_File    /var/run/secrets/kubernetes.io/serviceaccount/token
+        Merge_Log          On
+        K8S-Logging.Parser On
+        K8S-Logging.Exclude On
+
+  outputs: |
+    [OUTPUT]
+        Name            es
+        Match           *
+        Host            elasticsearch-master
+        Port            9200
+        Index           kubernetes_logs
+        Type            _doc
+        HTTP_User       elastic
+        HTTP_Passwd     ${ELASTICSEARCH_PASSWORD}
+
+serviceAccount:
+  create: true
+
+tolerations:
+  - operator: Exists
+
+resources:
+  limits:
+    memory: 100Mi
+  requests:
+    cpu: 100m
+    memory: 50Mi

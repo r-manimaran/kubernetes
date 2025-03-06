@@ -1,0 +1,73 @@
+# elasticsearch-values.yaml
+clusterName: "elasticsearch"
+nodeGroup: "master"
+
+# Single node configuration
+replicas: 1
+# Disable security features and certificates
+secret:
+  enabled: false
+
+securityConfig:
+  enabled: false
+
+createCert: false
+
+# Disable SSL/TLS
+protocol: http
+
+# Resources
+resources:
+  requests:
+    cpu: "100m"
+    memory: "512Mi"
+  limits:
+    cpu: "1000m"
+    memory: "1Gi"
+
+# Storage
+volumeClaimTemplate:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 5Gi
+
+# Elasticsearch configuration
+esConfig:
+  elasticsearch.yml: |
+    discovery.type: single-node
+    node.name: elasticsearch-master-0
+    network.host: 0.0.0.0
+    xpack.security.enabled: false
+    xpack.security.enrollment.enabled: false
+    xpack.security.http.ssl.enabled: false
+    xpack.security.transport.ssl.enabled: false
+
+# JVM configuration
+esJavaOpts: "-Xmx512m -Xms512m"
+
+# Pod scheduling
+antiAffinity: "soft"
+
+# HTTP configuration
+protocol: http
+httpPort: 9200
+
+# Disable all security features
+keystore: []
+
+# Service configuration
+service:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 9200
+      targetPort: 9200
+      protocol: TCP
+
+# Remove problematic configurations
+masterService: null
+roles: null
+
+
+
