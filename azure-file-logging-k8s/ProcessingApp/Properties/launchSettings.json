@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "ProcessingApp": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "LOG_FILE_PATH": "C:\\var\\logs\\appLog"
+      }
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

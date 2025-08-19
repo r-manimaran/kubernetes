@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azure-file-logging-deployment
+spec:
+  selector:
+    matchLabels:
+      app: azure-file-logging
+  template:
+    metadata:
+      labels:
+        app: azure-file-logging
+    spec:
+      containers:
+      - name: azure-file-logging
+      volumes:
+      - name: log-volume
+      persistentVolumeClaim:
+        claimName: azure-file-logging-pvc
+        image: rmanimaran/azure-file-logging:latest
+        env:
+        - name: LOG_FILE_PATH
+          value: /mnt/logs/app.ndjson
+        volumeMounts:
+        - name: log-volume
+          mountPath: /mnt/logs
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+        ports:
+        - containerPort: 80
+ 

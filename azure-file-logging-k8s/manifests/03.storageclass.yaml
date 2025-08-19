@@ -1,0 +1,9 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-storage-sc
+provisioner: kubernetes.io/no-provisioner
+parameters:
+  skuName: Standard_LRS
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
