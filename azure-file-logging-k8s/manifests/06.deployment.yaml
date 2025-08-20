@@ -4,6 +4,7 @@ metadata:
   name: azure-file-logging-deployment
   namespace: logging
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: azure-file-logging
@@ -20,6 +21,10 @@ spec:
         env:
         - name: LOG_FILE_PATH
           value: /mnt/logs/app.ndjson
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
         volumeMounts:
         - name: log-volume
           mountPath: /mnt/logs

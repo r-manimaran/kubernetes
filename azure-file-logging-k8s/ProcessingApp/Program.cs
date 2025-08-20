@@ -9,12 +9,14 @@ class Program
     static async Task Main(string[] args)
     {
         var logFilePath = Environment.GetEnvironmentVariable("LOG_FILE_PATH") ?? "/var/logs/app.log";
-        
+        var podName = Environment.GetEnvironmentVariable("POD_NAME") ?? "unknown-pod";  
+
         Log.Logger = new LoggerConfiguration()
             .WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day)
+            .Enrich.WithProperty("PodName", podName)
             .CreateLogger();
 
-        Log.Information("Application started. Logging to: {LogPath}", logFilePath);
+        Log.Information("Application started on pad {podName}. Logging to: {LogPath}", logFilePath);
 
         var cts = new CancellationTokenSource();
         Console.CancelKeyPress += (_, e) => {
@@ -45,20 +47,21 @@ class Program
                 var operation = _operations[_random.Next(_operations.Length)];
                 var customer = _customers[_random.Next(_customers.Length)];
                 var amount = _random.Next(10, 1000);
-                
-                Log.Information("Processing {Operation} for {Customer} with amount {Amount}", 
-                    operation, customer, amount);
+                var podName = Environment.GetEnvironmentVariable("POD_NAME") ?? "unknown-pod";
+
+                Log.Information("[{PodName}] Processing {Operation} for {Customer} with amount {Amount}", 
+                    podName, operation, customer, amount);
 
                 // Simulate random errors (20% chance)
                 if (_random.Next(1, 6) == 1)
                 {
                     var errorMsg = $"Failed to process {operation} for {customer}";
-                    Log.Error("Error occurred: {ErrorMessage}", errorMsg);
+                    Log.Error("[{PodName}] Error occurred: {ErrorMessage}", podName,errorMsg);
                 }
                 else
                 {
-                    Log.Information("Successfully completed {Operation} for {Customer}", 
-                        operation, customer);
+                    Log.Information("[{PodName}] Successfully completed {Operation} for {Customer}", 
+                        podName, operation, customer);
                 }
             }
             catch (Exception ex)
