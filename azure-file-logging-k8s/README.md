@@ -120,7 +120,7 @@ az role assignment create \
   --assignee $AKS_IDENTITY \
   --role "Storage File Data SMB Share Contributor" \
   --scope /subscriptions/eb641cab-8d83-43e2-9473-ed8d33be1ffb/resourceGroups/rg-deletethis/providers/Microsoft.Storage/storageAccounts/samaranaspire
-
+```
 ![alt text](image.png)
 
 ![alt text](image-1.png)
