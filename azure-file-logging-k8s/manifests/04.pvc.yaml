@@ -2,10 +2,12 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: azure-file-logging-pvc
+  namespace: logging
 spec:
   resources:
     requests:
       storage: 5Gi
-  storageClassName: azurefile-logs-file
+  storageClassName: ""
+  volumeName: azure-file-pv
   accessModes:
     - ReadWriteMany

@@ -1,9 +1,19 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: local-storage-sc
-provisioner: kubernetes.io/no-provisioner
+  name: azure-file-sc
+provisioner: file.csi.azure.com
 parameters:
   skuName: Standard_LRS
+  storageAccount: samaranaspire
+  shareName: kubelogging
+  secretName: azure-file-logging-secret
+  secretNamespace: logging
+  resourceGroup: rg-deletethis
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
+mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
+  - uid=0
+  - gid=0

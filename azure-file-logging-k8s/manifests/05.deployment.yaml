@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: azure-file-logging-deployment
+  namespace: logging
 spec:
   selector:
     matchLabels:
@@ -11,13 +12,11 @@ spec:
       labels:
         app: azure-file-logging
     spec:
+      imagePullSecrets:
+      - name: acr-secret
       containers:
       - name: azure-file-logging
-      volumes:
-      - name: log-volume
-      persistentVolumeClaim:
-        claimName: azure-file-logging-pvc
-        image: rmanimaran/azure-file-logging:latest
+        image: maranacr.azurecr.io/processingapp:latest
         env:
         - name: LOG_FILE_PATH
           value: /mnt/logs/app.ndjson
@@ -33,4 +32,7 @@ spec:
             cpu: "250m"
         ports:
         - containerPort: 80
- 
+      volumes:
+      - name: log-volume
+        persistentVolumeClaim:
+          claimName: azure-file-logging-pvc
