@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azure-function-deployment
+  namespace: logging
+spec:
+  selector:
+    matchLabels:
+      app: az-func-imageUploader
+  template:
+    metadata:
+      labels:
+        app: az-func-imageUploader
+    spec:
+      imagePullSecrets:
+      - name: acr-secret
+      volumes:
+      - name: secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: azure-keyvault-system-msi
+      containers:
+      - name: imageuploader
+        image: maranacr.azurecr.io/azfunimageuploader:latest
+        env:
+          - name: AzureWebJobsStorage
+            valueFrom:
+              secretKeyRef:
+                name: azure-keyvault-system-msi
+                key: AzureWebJobsStorage
+        volumeMounts:
+        - name: secrets-store
+          mountPath: /mnt/secrets-store
+          readOnly: true
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+        ports:
+        - containerPort: 80
