@@ -1,0 +1,12 @@
+services:
+  imageresizerfunc:
+    container_name: ImageResizerAzureFunc
+    image: ${DOCKER_REGISTRY-}imageresizerfunc
+    build:
+      context: .
+      dockerfile: ImageResizerFunc/Dockerfile
+    env_file:
+        - .env.docker
+    ports:
+     - 6000:80
+        

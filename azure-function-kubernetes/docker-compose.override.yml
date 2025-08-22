@@ -1,0 +1,4 @@
+services:
+  imageresizerfunc:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
