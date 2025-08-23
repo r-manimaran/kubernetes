@@ -57,16 +57,35 @@ Run the PowerShell script from the project root:
 **Create AKS cluster:**
 ```bash
 az aks create --resource-group <rg-name> --name <aks-name> --enable-managed-identity --node-count 1 --generate-ssh-keys
+
+az aks create --resource-group rg-aks --name maranaks --enable-managed-identity --node-count 1 --generate-ssh-keys
+
 ```
 
 **Get AKS credentials:**
 ```bash
 az aks get-credentials --resource-group <rg-name> --name <aks-name>
+
+az aks get-credentials --resource-group rg-aks --name maranaks 
 ```
 
 **Install Azure Key Vault CSI driver:**
 ```bash
 az aks enable-addons --addons azure-keyvault-secrets-provider --name <aks-name> --resource-group <rg-name>
+
+az aks enable-addons --addons azure-keyvault-secrets-provider --resource-group rg-aks --name maranaks
+
+```
+
+```bash
+# Get kubelet identity client ID
+az aks show --resource-group rg-aks --name maranaks --query "identityProfile.kubeletidentity.clientId" -o tsv
+
+# Get kubelet identity object ID
+az aks show --resource-group rg-aks --name maranaks --query "identityProfile.kubeletidentity.objectId" -o tsv
+
+# Get tenant ID
+az account show --query tenantId -o tsv
 ```
 
 ### 4. Configure Managed Identity Access
@@ -154,3 +173,72 @@ The function will:
 ![alt text](image-3.png)
 
 ![alt text](image-4.png)
+
+![alt text](image-6.png)
+
+![alt text](image-5.png)
+
+![alt text](image-7.png)
+
+![alt text](image-8.png)
+
+![alt text](image-9.png)
+
+## Clean-up activities
+
+```bash
+# Clean up activity
+kubectl delete -f service.yaml
+kubectl delete -f deployment.yaml
+kubectl delete -f 02.SecretProviderClass.yaml
+kubectl delete secret acr-secret -n logging
+kubectl delete -f 01.namespace.yaml
+
+
+# delete entire namespace
+kubectl delete namespace logging
+
+# delete aks cluster
+az aks delete --resource-group rg-aks --name maranaks --yes --no-wait
+
+# delete managed cluster resource group
+az group delete --name MC_rg-aks_maranaks_eastus --yes --no-wait
+
+# delete keyvault
+az keyvault delete --name kv-maransys --resource-group rg-aks
+az keyvault purge --name kv-maransys  # Permanently delete
+
+# delete storage account
+az storage account delete --name <storage-account-name> --resource-group rg-aks --yes
+
+# delete container registry
+az acr delete --name maranacr --resource-group rg-aks --yes
+
+# delete resource group
+az group delete --name rg-aks --yes --no-wait
+
+# remove Kubectl context
+kubectl config delete-context maranaks
+kubectl config delete-cluster maranaks
+```
+## Checklist 
+[ ] Create the .NET application which will allow the user to upload image to Azure Storage.
+[ ] Create Azure Storage account and note the ConnectionString.
+[ ] Map the connectionString in the local.settings.json file and test the application functionality in the local environment.
+[ ] Build the Docker file.
+[ ] Create the Azure Container Registry (ACR). Enable Admin access.
+[ ] Use the script file to build and push the image to ACR.
+[ ] Create the Azure Kubernetes Service (AKS).
+[ ] Create the Azure Key Vault service and create a connection string secret.
+[ ] Install CSI driver add-on to AKS.
+[ ] Get the CSI driver managed identity client ID.
+[ ] Get the tenant ID.
+[ ] Grant Key Vault access to CSI driver managed identity.
+[ ] Create ACR secret for image pull authentication.
+[ ] Deployment:
+  [ ] Create the namespace
+  [ ] Deploy the SecretProviderClass file
+  [ ] Deploy the deployment file
+  [ ] Deploy the service file
+[ ] Note the Public external IP from the service.
+[ ] Test the POST endpoint and ensure the file is uploaded to Azure Storage.
