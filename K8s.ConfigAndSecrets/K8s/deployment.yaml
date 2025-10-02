@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blazor-app
+  namespace: blazor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blazor-app
+  template:
+    metadata:
+      labels:
+        app: blazor-app
+    spec:
+      containers:
+      - name: blazor-app
+        image: rmanimaran/blazorapp:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        # Environment variables from configMap
+        envFrom:
+        - configMapRef:
+            name: blazor-config
+        # Environment variables from secret
+        - secretRef:
+            name: blazor-secrets
+        # Individual environment variables
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
+        - name: SPECIFIC_CONFIG
+          valueFrom:
+            configMapKeyRef:
+              name: blazor-config
+              key: APP_NAME
+        # Volumne mounts for file-based configuration
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+          readOnly: true
+        - name: secrets-volume
+          mountPath: /app/secrets
+          readOnly: true
+      volumes:
+      - name: config-volume
+        configMap:
+          name: blazor-config
+          items:
+            - key: appsettings.Production.json
+              path: appsettings.Production.json
+      - name: secrets-volume
+        secret:
+          secretName: blazor-secrets
+          items:
+            - key: DB_CONNECTION
+              path: connection.txt

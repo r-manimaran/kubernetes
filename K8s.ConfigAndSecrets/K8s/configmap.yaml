@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blazor-config
+  namespace: blazor
+data:
+  # App Settings
+  APP_NAME: "Blazor K8s Demo"
+  ENVIRONMENT: "Production"
+  LOG_LEVEL: "Information"
+  FEATURE_FLAG_WEATHER: "true"
+  API_TIMEOUT: "30"
+  # File-based config
+  appsettings.Production.json: |
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information",
+          "Microsoft.AspNetCore": "Warning"
+        }
+      },
+      "AllowedHosts": "*",
+      "AppSettings": {
+        "Title":"Blazor K8s Demo",
+        "MaxItems":100,
+        "EnableWeatherFeature": true      
+      }
+    }
+
