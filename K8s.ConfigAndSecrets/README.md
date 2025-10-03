@@ -107,6 +107,25 @@ stringData:
   SMTP_PASSWORD: "your-password"
 ```
 
+### Data vs stringData in secrets
+- data Field:
+  - Requires Base64 encoding manually
+  - Values must be Base64 encoded strings
+  - Used when we want explict control over encoding
+- stringData Field:
+  - Plain text values - Kubernetes encodes automatically
+  - More readable and easier to manage
+  - Kubernetes converts to Base64 internally
+
+```bash
+# View the secret (both will show as Base64)
+kubectl get secret blazor-secrets -n blazor -o yaml
+
+# Decode specific values
+kubectl get secret blazor-secrets -n blazor -o jsonpath='{.data.SMTP_PASSWORD}' | base64 -d
+kubectl get secret blazor-secrets -n blazor -o jsonpath='{.data.EXTERNAL_API_TOKEN}' | base64 -d
+```
+
 ### How It's Used in the App
 ```csharp
 // Program.cs - Loading configuration
