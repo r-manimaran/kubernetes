@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: shared-volume-pod
+  namespace: multicontainer
+  labels:
+    app.kubernetes.io/name: myapp
+spec:
+  containers:
+  - name: writer
+    image: busybox
+    command: ["/bin/sh", "-c", "while true; do date >> /mnt/shared/volume.txt; sleep 1; done"]
+    volumeMounts:
+    - name: shared-volume
+      mountPath: /mnt/shared
+
+  - name: reader
+    image: busybox
+    command: ["/bin/sh", "-c", "tail -f /mnt/shared/volume.txt"]
+    volumeMounts:
+    - name: shared-volume
+      mountPath: /mnt/shared
+
+  volumes:
+  - name: shared-volume
+    emptyDir: {}
