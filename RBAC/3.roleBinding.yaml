@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: backend-reader-rolebinding
+  namespace: dev
+subjects:
+- kind: User
+  name: jane-doe
+  namespace: dev
+roleRef:
+  kind: Role
+  name: backend-reader-role
+  apiGroup: rbac.authorization.k8s.io
+    
