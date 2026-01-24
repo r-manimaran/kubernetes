@@ -4,8 +4,8 @@ metadata:
   name: backend-reader-rolebinding
   namespace: dev
 subjects:
-- kind: User
-  name: jane-doe
+- kind: ServiceAccount
+  name: backend-reader-sa
   namespace: dev
 roleRef:
   kind: Role

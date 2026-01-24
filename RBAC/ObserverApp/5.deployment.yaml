@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: observerapp-deployment
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: observerapp
+  template:
+    metadata:
+      labels:
+        app: observerapp
+    spec:
+      serviceAccountName: backend-reader-sa
+      containers:
+      - name: observerapp-container
+        image: bitnami/kubectl:latest
+        command:
+          - sleep
+          - "3600"
