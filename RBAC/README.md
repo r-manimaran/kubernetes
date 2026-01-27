@@ -55,15 +55,20 @@ kubectl exec -it observerapp-deployment-9ddb98764-xdxgm -n dev -- /bin/sh
 # once inside the pod, use the following command to verify access to resources.
 # I am running
 kubectl get pods
+```
+
 ![alt text](image.png)
 
+```bash
 # we will try deleting the other pod within this observer pod.
 kubectl delete pod backend-app-deployment-5d7f9f6b7b-abcde -n dev
+```
 ![alt text](image-1.png)
-
+```bash
 # Check the Pod describe for the target pod
 kubectl describe pod backend-app-deployment-5d7f9f6b7b-abcde -n dev
 # If you check the service account it will display as default.
+```
 ![alt text](image-2.png)
 ```
 
