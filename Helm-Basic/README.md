@@ -141,6 +141,9 @@ kubectl port-forward service/simple-helm-app-service 8082:80
 - Now access the application in the browser using `http://localhost:8082`
 ![alt text](image-9.png)
 
+### Updating the Application
+- Added the application with the updated converter
+![Local running](image-10.png)
 - Now Update the project and push the new version to docker hub
 ```bash
 # build the docker with new tag v2
@@ -148,3 +151,94 @@ docker build -t rmanimaran/helmapp:v2 .
 # push the docker to docker hub
 docker push rmanimaran/helmapp:v2
 ```
+![docker build v2](image-11.png)
+![docker push](image-12.png)
+
+- Now I have v2 of our project pushed to docker hub.
+- Now update the values.yaml file to use the new tag v2
+```yaml
+replicaCount: 3
+image:
+  repository: rmanimaran/helmapp
+  tag: v2
+container:
+  port: 8080
+
+service:
+  port: 80
+  nodePort: 30000
+  type: NodePort
+
+environment: development
+```
+- Now upgrade the helm chart again
+```bash
+# upgrade the helm chart
+helm upgrade simple-helm-app .
+```
+![Helm Upgrade to v2](image-13.png)
+
+- get the Helm history
+```bash
+helm history simple-helm-app
+```
+![alt text](image-14.png)
+- Perform the port forward from the service
+```bash
+kubectl port-forward service/simple-helm-app-service 8082:80
+```
+- Now access the application in the browser using `http://localhost:8082`
+![Blazor v2 app](image-15.png)
+## Rollback testing
+- Change the values files with the image version which does not exists
+- Apply the Helm upgrade with the wrong version number
+```yaml
+replicaCount: 3
+image:
+  repository: rmanimaran/helmapp
+  tag: v3.0.0
+container:
+  port: 8080
+
+service:
+  port: 80
+  nodePort: 30000
+  type: NodePort
+
+environment: development
+```
+- Now upgrade the helm chart again
+```bash
+# upgrade the helm chart
+helm upgrade simple-helm-app .
+```
+-Now the new version will be applied. But because of image tag v3.0.0 which is not exists, our application will shows error.
+- Perform the rollback to version 8
+```bash
+helm rollback simple-helm-app 8
+```
+![alt text](image-16.png)
+
+- Now port forward the application and test
+
+- Rollback to version 1 of the application
+![Version 1 of the application](image-17.png)
+
+- Rollback to v2 of the application
+![Version 2 of the application](image-18.png)
+
+![alt text](image-19.png)
+
+## Uninstall and Clean-up
+- Now uninstall the helm release
+```bash
+helm uninstall simple-helm-app
+```
+- Verify its get removed.
+```bash
+helm list
+kubectl get deployments
+kubectl get pods
+kubectl get services
+```
+![Helm Uninstall](image-20.png)

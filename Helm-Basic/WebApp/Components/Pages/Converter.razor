@@ -1,18 +1,28 @@
 ﻿@page "/converter"
 <h3>Quick Converter : v2</h3>
 
-<div class="converter-card">
-    <label>Celsius</label>
-    <input type="number" @bind-value="celsius" @bind-value:event="oninput" />
-    <span> = </span>
+<div class="card p-4 shadow">
+    <select @bind="selectedCategory" class="form-select mb-3">
+        <option value="Temp">Temperature (C to F)</option>
+        <option value="Length">Length (KM to Miles)</option>
+    </select>
 
-    <label>Fahrenheit</label>
-    <input type="number" value="@Fahrenheit" readonly />
+    <div class="input-group">
+        <input type="number" @bind-value="inputValue" @bind-value:event="oninput" class="form-control" />
+        <span class="input-group-text">@SourceLabel</span>
+    </div>
+
+    <h4 class="mt-3 text-primary">Result: @ConvertedValue @TargetLabel</h4>
 </div>
 
 @code {
-    private double celsius;
+    private string selectedCategory = "Temp";
+    private double inputValue;
 
-    //The conversion logic
-    private double Fahrenheit => (celsius * 9 / 5) + 32;
+    private string SourceLabel => selectedCategory == "Temp" ? "Celsius" : "Kilometers";
+    private string TargetLabel => selectedCategory == "Temp" ? "Fahrenheit" : "Miles";
+
+    private double ConvertedValue => selectedCategory == "Temp"
+        ? (inputValue * 9 / 5) + 32
+        : inputValue * 0.621371;
 }
