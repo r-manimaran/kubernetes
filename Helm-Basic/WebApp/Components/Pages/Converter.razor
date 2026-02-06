@@ -1,0 +1,18 @@
+﻿@page "/converter"
+<h3>Quick Converter : v2</h3>
+
+<div class="converter-card">
+    <label>Celsius</label>
+    <input type="number" @bind-value="celsius" @bind-value:event="oninput" />
+    <span> = </span>
+
+    <label>Fahrenheit</label>
+    <input type="number" value="@Fahrenheit" readonly />
+</div>
+
+@code {
+    private double celsius;
+
+    //The conversion logic
+    private double Fahrenheit => (celsius * 9 / 5) + 32;
+}
