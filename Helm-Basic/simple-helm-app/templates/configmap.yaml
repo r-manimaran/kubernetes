@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+  labels:
+    app: {{ .Release.Name }}
+    environment: {{ .Values.environment | upper }}
+data:
+  app-name: {{ .Release.Name  | quote }}
+  environment: {{ .Values.environment | default "development" | lower }}
+  database-url: {{ .Values.database.url | default "localhost:5432" | quote }}
+  log-level: {{ .Values.logging.level | default "INFO" | upper }}

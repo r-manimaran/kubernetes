@@ -242,3 +242,47 @@ kubectl get pods
 kubectl get services
 ```
 ![Helm Uninstall](image-20.png)
+
+
+## Phase 2:
+- Introduced Config file with template.
+- Updated the Home.razor to show the Environment Information.
+- pushed the version 3 of the Image to docker hub
+- Updated the deployment.yaml with if else condition and created a separate value files for Staging, Development and production.
+
+```bash
+# helm install with values-dev.yaml
+helm install simple-helm-app . -f values-dev.yaml
+```
+![alt text](image-21.png)
+
+- Access the application and check the UI.
+![alt text](image-22.png)
+
+```bash
+# helm uninstall and install as staging
+helm uninstall simple-helm-app
+helm install simple-helm-app . -f values-staging.yaml
+# check the Pods and perform Port forward
+kubectl get pods
+kubectl port-forward service/simple-helm-app-service 8082:80
+```
+
+![alt text](image-23.png)
+
+- Access the application and check for the environment information.
+![Environment: Staging](image-24.png)
+
+```bash
+# helm uninstall and install as production
+helm uninstall simple-helm-app
+helm install simple-helm-app . -f values-prod.yaml
+# check the Pods and perform Port forward
+kubectl get pods
+kubectl port-forward service/simple-helm-app-service 8082:80
+```
+
+![Helm Install Production](image-25.png)
+
+- Access the application and check for the environment information.
+![Environment production](image-26.png)

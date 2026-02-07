@@ -1,0 +1,19 @@
+replicaCount: 2
+image:
+  repository: rmanimaran/helmapp
+  tag: v3
+container:
+  port: 8080
+
+service:
+  port: 80
+  nodePort: 30000
+  type: NodePort
+
+environment: staging
+database:
+  enabled: true
+  url: "postgres://user:password@hostname:5432/dbname"
+
+logging:
+  level: "Debug"
