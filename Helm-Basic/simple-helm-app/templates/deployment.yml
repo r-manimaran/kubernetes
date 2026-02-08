@@ -21,20 +21,27 @@ spec:
           {{- if eq .Values.environment "production" }}
             - name: ASPNETCORE_ENVIRONMENT
               value: "Production"
-            - name: LOG_LEVEL
-              value: "Warning"
           {{- else if eq .Values.environment "staging" }}
             - name: ASPNETCORE_ENVIRONMENT
               value: "Staging"
-            - name: LOG_LEVEL
-              value: "Information"
           {{- else }}
             - name: ASPNETCORE_ENVIRONMENT
               value: "Development"
-            - name: LOG_LEVEL
-              value: "Debug"
           {{- end }}
+            - name: APP_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-config
+                  key: app-name
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-config
+                  key: log-level
           {{- if .Values.database.enabled }}
             - name: DATABASE_URL
-              value: {{ .Values.database.url | quote }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-config
+                  key: database-url
           {{- end }}

@@ -1,12 +1,24 @@
 ﻿@page "/"
 @inject IWebHostEnvironment Environment
+@inject IConfiguration Configuration
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
-<div class="alert alert-info">
-    <strong>Environment:</strong> @Environment.EnvironmentName
+<div class="row">
+    <div class="col-md-6">
+        <div class="alert alert-info">
+            <h5>Environment Information</h5>
+            <strong>Environment:</strong> @Environment.EnvironmentName<br/>
+            <strong>App Name:</strong> @Configuration["APP_NAME"]<br/>
+            <strong>Log Level:</strong> @Configuration["LOG_LEVEL"]<br/>
+            @if (!string.IsNullOrEmpty(Configuration["DATABASE_URL"]))
+            {
+                <strong>Database:</strong> @Configuration["DATABASE_URL"]<br/>
+            }
+        </div>
+    </div>
 </div>
 
 Welcome to your new app.
