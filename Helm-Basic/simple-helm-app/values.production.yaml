@@ -17,3 +17,6 @@ database:
 
 logging:
   level: "Debug"
+  
+secrets:
+  db-password: "mysecretpassword"

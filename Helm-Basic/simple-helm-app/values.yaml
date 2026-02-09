@@ -10,4 +10,7 @@ service:
   nodePort: 30000
   type: NodePort
 
+secrets:
+  db-password: "mysecretpassword"
+
 environment: development
