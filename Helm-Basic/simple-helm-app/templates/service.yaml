@@ -7,6 +7,10 @@ spec:
   selector:
     app: {{ .Release.Name }}-app
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.container.port }}
-      nodePort: {{ .Values.service.nodePort | default 30000 }}
+  {{- with .Values.service }}
+    - port: {{ .port }}
+      targetPort: {{ .port }}
+      {{- if eq .type "NodePort" }}
+      nodePort: {{ .nodePort | default 30000 }}
+      {{- end }}
+  {{- end }}
