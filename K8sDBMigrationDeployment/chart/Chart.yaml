@@ -1,0 +1,6 @@
+apiVersion: v2
+name: task-mgmt-k8s-migration
+description: Perform DB migration while running in k8s environment
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
