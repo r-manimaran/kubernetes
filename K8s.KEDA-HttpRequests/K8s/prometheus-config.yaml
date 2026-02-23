@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-scrape-config
+  namespace: keda-http-app
+data:
+  fastapi-scrape.yml: |
+    - job_name: 'fastapi-app'
+      metrics_path: '/metrics'
+      static_configs:
+        - targets: ['http-app-service:80']

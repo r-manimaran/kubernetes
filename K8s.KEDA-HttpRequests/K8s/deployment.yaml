@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: http-app
+  namespace: keda-http-app
 spec:
   replicas: 1
   selector:
@@ -14,8 +15,6 @@ spec:
     spec:
       containers:
       - name: http-app
-        image: hashicorp/http-echo:0.2.3
-        args:
-          - "-text=Hello, KEDA!"
+        image: rmanimaran/fastapi-monitoring:v4
         ports:
-        - containerPort: 5678
+        - containerPort: 7755

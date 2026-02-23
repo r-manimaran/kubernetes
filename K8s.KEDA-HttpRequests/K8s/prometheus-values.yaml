@@ -1,0 +1,7 @@
+serverFiles:
+  prometheus.yml:
+    scrape_configs:
+      - job_name: 'fastapi-app'
+        metrics_path: '/metrics'
+        static_configs:
+          - targets: ['http-app-service:80']
