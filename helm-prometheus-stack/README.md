@@ -1,4 +1,4 @@
-## Installing the Helm 
+## Installing the Helm chart with Prometheus stack to monitor FastApi app deployed in Kubernetes
 Follow the steps in the below blog to install the helm in both windows and mac.
 ```url
 https://kubernetestraining.io/blog/installing-helm-on-mac-and-windows

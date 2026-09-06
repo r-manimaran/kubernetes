@@ -221,6 +221,15 @@ az group delete --name rg-aks --yes --no-wait
 kubectl config delete-context maranaks
 kubectl config delete-cluster maranaks
 ```
+
+- For logging
+
+```bash
+kubectl create secret generic azure-storage-secret \
+  --from-literal=azurestorageaccountname=<storage-account-name> \
+  --from-literal=azurestorageaccountkey=<storage-account-key> \
+  --namespace=logging
+```
 ## Checklist 
 [ ] Create the .NET application which will allow the user to upload image to Azure Storage.
 [ ] Create Azure Storage account and note the ConnectionString.
@@ -242,3 +251,16 @@ kubectl config delete-cluster maranaks
   [ ] Deploy the service file
 [ ] Note the Public external IP from the service.
 [ ] Test the POST endpoint and ensure the file is uploaded to Azure Storage.
+
+## Helm Chart Deployment Checklist
+### Helm Chart Creation
+- [ ] Create helm chart directory structure
+- [ ] Create Chart.yaml with metadata
+- [ ] create values.yaml with configurable parameters
+- [ ] create templates/namespace.yaml
+- [ ] Create templates/secret.yaml for ACR authentication
+- [ ] Create templates/secretproviderclass.yaml
+- [ ] Create templates/deployment.yaml
+- [ ] Create templates/service.yaml
+- [ ] Create templates/storage-secret.yaml for Azure File Share
+

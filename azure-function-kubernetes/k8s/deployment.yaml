@@ -21,6 +21,11 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: azure-keyvault-system-msi
+      - name: azurefile
+        azureFile:
+          secretName: azure-storage-secret
+          shareName: azurefile-share
+          readOnly: false
       containers:
       - name: imageuploader
         image: maranacr.azurecr.io/azfunimageuploader:latest
@@ -34,6 +39,9 @@ spec:
         - name: secrets-store
           mountPath: /mnt/secrets-store
           readOnly: true
+        - name: azurefile
+          mountPath: /mnt/azurefile
+          readOnly: false
         resources:
           limits:
             memory: "128Mi"

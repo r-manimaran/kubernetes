@@ -286,3 +286,34 @@ kubectl port-forward service/simple-helm-app-service 8082:80
 
 - Access the application and check for the environment information.
 ![Environment production](image-26.png)
+
+
+## Secrets file with range operation
+- Added secrets to values files and created a secrets.yaml file in templates folder.
+- Used `range` opearator to get the list of secrets from the value files and map to the secrets.yaml file.
+
+```yaml
+{{- if .Values.secrets }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Release.Name }}-secrets
+type: Opaque
+data:
+{{- range $key, $value := .Values.secrets }}
+  {{ $key }}: {{ $value | b64enc }}
+{{- end }}
+{{- end -}}
+```
+
+```bash
+# Install the Helm app 
+helm install simple-helm-app . -f values-dev.yaml
+# Check the secrets created
+kubectl get secrets
+# Describe the secrets
+kubectl describe secret simple-helm-app-secrets
+# Output as yaml
+kubectl get secret simple-helm-app-secrets -o yaml
+```
+![alt text](image-27.png)

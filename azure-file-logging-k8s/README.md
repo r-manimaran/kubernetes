@@ -1,21 +1,26 @@
-
+# Logging to Azure File Share from Kubernetes Pods.
+This project demonstrates how to log from a .NET console application running in a Kubernetes pod to an Azure File Share using Serilog.
+It includes the following steps:
 # Checklist
 - [ ] Create the console app to do some processing
     - [ ] Add the Serilog Nuget packages
     - [ ] Add the processing logic to generate sample Info and error logs
     - [ ] Set the Enviornment variable LOG_FILE_PATH in lauchsettings file
     - [ ] Run the Console App and test the logs generated in the defined log path
+
 - [ ] Create the Dockerfile
     - [ ] Add the container support for the console app.
     - [ ] Build the docker image
     - [ ] Tag the image with the docker hub repository information
     - [ ] Push the image to the docker hub
+
 - [ ] Create the Docker Compose file
     - [ ] Add the docker compose file to run the console app
     - [ ] Refer the image from Docker hub
     - [ ] Create a .env file and define the environment variable for Docker hub name
     - [ ] Run the app in the container.
     - [ ] Test the generated log in the volume mapped location.
+
 - [ ] Create Azure Storage Account File Share
     - [ ] Create the storage account
     - [ ] Create the file share
@@ -29,13 +34,28 @@
   - [ ] Push the image to ACR
 
 - [ ] Create the Kubernetes deployment manifest
+    - [ ] Create the namespace.yaml file
+    - [ ] Create the storageclass.yaml file
     - [ ] Add the deployment.yaml file
-    - [ ] Add the service.yaml file
     - [ ] Add the volume and volume mount for the Azure File Share
-    - [ ] Add the secret for the storage account name and key 
+    - [ ] Add the secret for the storage account name and key
 
-- [ ] Run the App in the Azure Kubernetes cluster.
+- [ ] Create Azure Kubernetes Service
+    - [ ] Create the AKS cluster in Azure
+    - [ ] Configure kubectl to connect to the AKS cluster
+    - [ ] Grant AKS Access to Storage account
+    - [ ] Execute the manifests files in the order
+        - [ ] Kubectl apply -f 01.namespace.yaml
+        - [ ] kubectl apply -f 02.secret.yaml
+        - [ ] kubectl apply -f 03.storageclass.yaml
+        - [ ] kubectl apply -f 04.pv.yaml
+        - [ ] kubectl apply -f 05.pvc.yaml
+        - [ ] kubectl apply -f 06.deployment.yaml
 
+- [ ] Verify the deployment
+- [ ] Verify the logs in the Azure File Share
+
+  
 docker rm -f processingapp
 
 ## Create ACR and Build Image
@@ -84,7 +104,7 @@ az aks get-credentials --resource-group <your-rg> --name <your-aks-name>
 # Apply manifests
 kubectl apply -f manifests/
 ```
-```
+```bash
 # Delete deployment first
 kubectl delete deployment azure-file-logging-deployment -n logging
 
@@ -132,3 +152,4 @@ az role assignment create \
 ![alt text](image-4.png)
 
 ![alt text](image-5.png)
+

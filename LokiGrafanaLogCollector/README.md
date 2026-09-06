@@ -54,3 +54,6 @@ http://localhost:3100/loki/api/v1/labels
  - Grafana: http://localhost:3000
  - Loki API: http://localhost:3100
  - Prometheus: http://localhost:9090
+
+
+ ![alt text](image.png)

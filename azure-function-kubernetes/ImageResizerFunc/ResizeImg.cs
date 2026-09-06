@@ -3,12 +3,13 @@ using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using System.Text.Encodings.Web;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
+using Serilog;
+using System.Text.Encodings.Web;
 
 namespace ImageResizerFunc;
 
@@ -26,7 +27,8 @@ public class ResizeImg
     [Function("ResizeImage")]
     public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
     {
-        _logger.LogInformation("C# HTTP trigger function processed a request.");
+        _logger.LogInformation("ResizeImage function triggered.");
+
         _logger.LogInformation($"Content-Type: {req.Headers.GetValues("Content-Type").FirstOrDefault()}");
         try {
 
@@ -107,6 +109,7 @@ public class ResizeImg
             await blob.UploadAsync(stream, uploadOptions);
 
             _logger.LogInformation($"File received: {sanitizedFileName}, Size: {file.Length} bytes");
+            _logger.LogInformation("Successfully processed file {FileName}", file.FileName);
 
             var response = req.CreateResponse(System.Net.HttpStatusCode.OK);
             // HTML encode filename to prevent XSS attacks

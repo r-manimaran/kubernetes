@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>{{ customer.name }}</h2>
+    <mat-dialog-content>
+      <p><strong>Email:</strong> {{ customer.email }}</p>
+      <p><strong>Phone:</strong> {{ customer.phone || '—' }}</p>
+      <p><strong>Customer since:</strong> {{ customer.createdAt | date:'longDate' }}</p>
+    </mat-dialog-content>
+    <mat-divider></mat-divider>
+    <mat-dialog-actions align="end">
+      <button mat-button (click)="dialogRef.close()">Close</button>
+    </mat-dialog-actions>

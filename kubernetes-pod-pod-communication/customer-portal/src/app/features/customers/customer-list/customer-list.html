@@ -1,0 +1,140 @@
+<!-- <div class="customer-list">
+    @if(loading()){
+        <div class="spinner" role="status" aria-live="polite"> Loading Customers...</div>
+    }
+
+    @if(error()){
+        <div class="error-banner" role="alert">
+            {{ error() }}
+        </div>
+    }
+
+    @if(!loading() && !error() ){
+     
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(customer of customers(); track customer.id){
+                    <tr>
+                        <td>{{ customer.name }}</td>
+                        <td>{{ customer.email }}</td>
+                        <td>{{ customer.phone }}</td>
+                        <td>{{ customer.address }}</td>
+                        <td>{{ customer.city }}</td>
+                        <td>{{ customer.state }}</td>
+                    </tr>
+                }
+                @empty {
+                    <tr><td colspan="6">No customers found.</td></tr>
+                }
+            </tbody>
+        </table>    
+
+    <div class="pagination" aria-label="Pagination">
+        <button (click)="prevPage()" [disabled]="pageNumber() === 1">Previous</button>
+        <span>Page {{ pageNumber() }} of {{ totalPages() }}</span>
+        <button (click)="nextPage()" [disabled]="pageNumber() === totalPages()">Next</button>
+    </div>
+    }
+</div> -->
+
+<mat-card class ="customer-list-card">
+  <mat-card-header>
+    <mat-card-title>Customer List</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (loading()) {
+      <div class="loading-overlay">
+      <mat-spinner></mat-spinner>
+      Loading Customers...
+    </div>
+    }
+    
+   @if (error()) {
+      <div class="error-banner">{{ error() }}</div>
+    }
+
+    @if (!error()) {
+        <div class="table-container">
+
+    <table mat-table [dataSource]="dataSource">
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let customer"> {{customer.id}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let customer"> {{customer.name}} </td>
+      </ng-container>
+
+      <!-- Email Column -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef> Email </th>
+        <td mat-cell *matCellDef="let customer"> {{customer.email}} </td>
+      </ng-container>
+
+      <!-- Phone Column -->
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef> Phone </th>
+        <td mat-cell *matCellDef="let customer"> {{customer.phone}} </td>
+      </ng-container>
+
+      <!-- City Column -->
+      <ng-container matColumnDef="city">
+        <th mat-header-cell *matHeaderCellDef> City </th>
+        <td mat-cell *matCellDef="let customer"> {{customer.city}} </td>
+      </ng-container>
+
+      <!-- State Column -->
+      <ng-container matColumnDef="state">
+        <th mat-header-cell *matHeaderCellDef> State </th>
+        <td mat-cell *matCellDef="let customer"> {{customer.state}} </td>
+      </ng-container>
+
+      <!-- Created At Column -->
+        <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef>Customer Since</th>
+            <td mat-cell *matCellDef="let c">{{ c.createdAt | date:'mediumDate' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let c">
+              <button mat-icon-button (click)="openDetail(c)" aria-label="View details">
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+              (click)="openDetail(row)" class="clickable-row"></tr>
+        </table>
+      </div>
+
+
+      <mat-paginator
+        [length]="totalCount()"
+        [pageSize]="pageSize()"
+        [pageSizeOptions]="[10, 25, 50, 100]"
+        [pageIndex]="pageNumber() - 1"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    }
+    </mat-card-content>
+    </mat-card>
