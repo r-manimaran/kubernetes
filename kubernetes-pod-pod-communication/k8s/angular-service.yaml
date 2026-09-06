@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-app
+  namespace: app-communication
+spec:
+  type: LoadBalancer
+  selector:
+    app: customer-app
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
