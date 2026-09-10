@@ -1,0 +1,39 @@
+# ==============================
+# 4. Ingress Router
+# ==============================
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: local-api-ingress
+  annotations:
+    # crucial for .NET: This annotation strips the leading path before sending it to your app.
+    # e.g., 'localhost/orders/getall' becomes 'orders-service/getall' so your app's controllers match correctly.
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /orders(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: orders-service
+                port:
+                  number: 80
+          - path: /inventory(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: inventory-service
+                port:
+                  number: 80
+          - path: /customers(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: customers-service
+                port:
+                  number: 80
+                  

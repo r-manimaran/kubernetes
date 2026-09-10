@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders-api
+  template:
+    metadata:
+      labels:
+        app: orders-api
+    spec:
+      containers:
+      - name: api
+        image: hashicorp/http-echo
+        args: ["-text=📦 Orders API - Connection Successful"]
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-service
+spec:
+  ports:
+    - port: 80
+      targetPort: 5678
+  selector:
+    app: orders-api

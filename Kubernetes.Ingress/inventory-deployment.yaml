@@ -1,0 +1,34 @@
+# ==========================================
+# 2. Inventory Api Deployment & Service
+# ==========================================
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-api
+  template:
+    metadata:
+      labels:
+        app: inventory-api
+    spec:
+      containers:
+      - name: api
+        image: hashicorp/http-echo
+        args: ["-text=📦 Inventory API - Connection Successful"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-service
+spec:
+  selector:
+    app: inventory-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5678
