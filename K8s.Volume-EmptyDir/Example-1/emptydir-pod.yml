@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: emptydir-vol
+  labels:
+    app.kubernetes.io/name: myapp
+spec:
+  containers:
+  - name: c1
+    image: ubuntu:latest
+    command: ["/bin/bash", "-c","sleep 1000"]
+    volumeMounts:
+    - name: share
+      mountPath: /tmp/share
+    resources:
+      limits:
+        memory: "64Mi"
+        cpu: "250m"
+      requests:
+        memory: "64Mi"
+        cpu: "100m"
+        
+  - name: c2
+    image: ubuntu:latest
+    command: ["/bin/bash", "-c","sleep 1000"]
+    volumeMounts:
+    - name: share
+      mountPath: /tmp/data
+    resources:
+      limits:
+        memory: "64Mi"
+        cpu: "250m"
+      requests:
+        memory: "64Mi"
+        cpu: "100m"
+
+  volumes:
+  - name: share
+    emptyDir: {}
