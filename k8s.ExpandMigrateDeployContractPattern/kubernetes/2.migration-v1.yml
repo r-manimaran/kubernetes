@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: orders-db-migration-job-v1
+spec:
+  backoffLimit: 2 # Specifies the number of retries before marking it as failed.
+
+  template:
+    spec:
+      restartPolicy: Never
+
+      containers:
+        - name: migration-runner
+          image: rmanimaran/orders-api-k8s-dbmigrate:v1
+
+          args:
+            - migrate
+
+          env:
+            - name: ConnectionStrings__OrdersDb
+              valueFrom:
+                secretKeyRef:
+                  name: orders-db-secret
+                  key: connectionstring

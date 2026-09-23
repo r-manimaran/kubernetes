@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-api
+
+
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+
+  selector:
+    matchLabels:
+      app: orders-api
+
+  template:
+    metadata:
+      labels:
+        app: orders-api
+
+    spec:
+      containers:
+      - name: orders-api
+        image: rmanimaran/orders-api-k8s-dbmigrate:v2
+        imagePullPolicy: IfNotPresent
+
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+
+        ports:
+        - containerPort: 8080
+
+        env:
+          - name: ConnectionStrings__OrdersDb
+            valueFrom:
+              secretKeyRef:
+                name: orders-db-secret
+                key: connectionstring
+                
