@@ -1,0 +1,30 @@
+# Guard rails so a runaway build cannot consume the whole cluster.
+# Adjust to your node sizes (reduce for Docker Desktop).
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: jenkins-agents-quota
+  namespace: jenkins-agents
+spec:
+  hard:
+    pods: "10"
+    requests.cpu: "6"
+    requests.memory: 12Gi
+    limits.cpu: "12"
+    limits.memory: 24Gi
+---
+# Defaults apply to containers that declare nothing (e.g. the auto-injected jnlp container)
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: jenkins-agents-defaults
+  namespace: jenkins-agents
+spec:
+  limits:
+    - type: Container
+      defaultRequest:
+        cpu: 100m
+        memory: 256Mi
+      default:
+        cpu: "1"
+        memory: 1Gi

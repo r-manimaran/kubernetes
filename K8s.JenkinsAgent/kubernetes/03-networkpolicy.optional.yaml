@@ -1,0 +1,11 @@
+# OPTIONAL. Blocks inbound traffic to agent pods; outbound stays open
+# (agents must reach Jenkins, GitHub, NuGet and ACR).
+# Requires a CNI that enforces NetworkPolicy (AKS with Azure/Calico network policy enabled).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-ingress
+  namespace: jenkins-agents
+spec:
+  podSelector: {}
+  policyTypes: ["Ingress"]
