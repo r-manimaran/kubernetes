@@ -1,0 +1,16 @@
+**/.vs/**
+.vs/**
+.vs/
+**/.git/**
+.git/**
+.git/
+*.user
+*.suo
+*.md
+nuget.exe
+**/obj/**
+**/bin/**
+**/*.vsidx
+**/*.db
+**/*.db-shm
+**/*.db-wal

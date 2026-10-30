@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: algorithmapi
+  labels:
+    app: algorithmapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: algorithmapi
+  template:
+    metadata:
+      labels:
+        app: algorithmapi
+    spec:
+      nodeSelector:
+        kubernetes.io/os: windows
+      containers:
+        - name: algorithmapi
+          image: wincontacr01.azurecr.io/algorithmapi:v2
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
